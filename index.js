@@ -1,11 +1,23 @@
 /**
  * Created by llan on 2017/1/11.
  */
+/**
+ * 方块
+ * @param params
+ */
+const arrs = [
+    [[1, 0], [1, 0], [1, 1]],//L
+    [[1], [1], [1], [1]]//I
+];
 const block = function (params = {
     arr: [[1, 0], [1, 0], [1, 1]],
     curLeft: 0,
     curTop: 0,
-    BLOCK_SIZE: 20
+    BLOCK_SIZE: 20,
+    siteSize: {
+        width: 200,
+        height: 360
+    }
 }) {
     //方块矩阵
     let arr = params.arr,
@@ -13,6 +25,8 @@ const block = function (params = {
         curTop = params.curTop;
     //方块大小
     const BLOCK_SIZE = params.BLOCK_SIZE;
+    //当前画布大小
+    const siteSize = params.siteSize;
     /**
      * 画当前方块
      * @param i
@@ -67,6 +81,36 @@ const block = function (params = {
             }
         }
     };
+    /**
+     * 判断当前方块是否能移动||变形
+     * @param arr 将要判断的方块
+     * @param deform 是否需要变形
+     * @param canMove
+     * @returns {{canMoveRight: boolean, canMoveDown: boolean}} 返回能否向右 || 向下
+     */
+    const canMove = function (arr, deform = false, canMove = {
+        canMoveRight: true,
+        canMoveDown: true
+    }) {
+        checkArrWith1(arr, function (i, j) {
+            if (deform) {
+                if (siteSize.width - BLOCK_SIZE * (j + 1) < 0) {
+                    canMove.canMoveRight = false;
+                }
+                if (siteSize.height - BLOCK_SIZE * (i + 1) < 0) {
+                    canMove.canMoveDown = false;
+                }
+            } else {
+                if (siteSize.width - BLOCK_SIZE * (j + 1) <= 0) {
+                    canMove.canMoveRight = false;
+                }
+                if (siteSize.height - BLOCK_SIZE * (i + 1) <= 0) {
+                    canMove.canMoveDown = false;
+                }
+            }
+        });
+        return canMove;
+    };
     //画出当前方块
     checkArrWith1(arr, draw);
     //记录当前方块
@@ -81,55 +125,72 @@ const block = function (params = {
             //space
             case 32:
                 let {newArr, lefts, tops}= clockwise(arr);
-                //记录转变后的矩阵
-                arr = newArr;
-                for (let i in lefts) {
-                    // activityModels[i].style.left = `calc(${lefts[i]}px + ${curLeft}px)`;
-                    // activityModels[i].style.top = `calc(${tops[i]}px + ${curTop}px)`;
-                    activityModels[i].style.left = `${lefts[i]}px`;
-                    activityModels[i].style.top = `${tops[i]}px`;
+                let {canMoveRight, canMoveDown} = canMove(newArr, true);
+                if (canMoveRight && canMoveDown) {
+                    //记录转变后的矩阵
+                    arr = newArr;
+                    for (let i in lefts) {
+                        activityModels[i].style.left = `${lefts[i]}px`;
+                        activityModels[i].style.top = `${tops[i]}px`;
+                    }
                 }
                 break;
             //left
             case 37:
-                for (let v of activityModels) {
-                    v.style.left = `calc(${v.style.left } - ${BLOCK_SIZE}px)`;
+                if (curLeft > 0) {
+                    for (let v of activityModels) {
+                        v.style.left = `calc(${v.style.left} - ${BLOCK_SIZE}px)`;
+                    }
+                    curLeft--;
                 }
-                curLeft--;
                 break;
             //top
             case 38:
-                for (let v of activityModels) {
-                    v.style.top = `calc(${v.style.top } - ${BLOCK_SIZE}px)`;
+                if (curTop > 0) {
+                    for (let v of activityModels) {
+                        v.style.top = `calc(${v.style.top} - ${BLOCK_SIZE}px)`;
+                    }
+                    curTop--;
                 }
-                curTop--;
                 break;
             //right
             case 39:
-                for (let v of activityModels) {
-                    v.style.left = `calc(${v.style.left } + ${BLOCK_SIZE}px)`;
+                let moveRight = canMove(arr).canMoveRight;
+                if (moveRight) {
+                    for (let v of activityModels) {
+                        v.style.left = `calc(${v.style.left} + ${BLOCK_SIZE}px)`;
+                    }
+                    curLeft++;
                 }
-                curLeft++;
                 break;
             //down
             case 40:
-                for (let v of activityModels) {
-                    v.style.top = `calc(${v.style.top } + ${BLOCK_SIZE}px)`;
+                let moveDown = canMove(arr).canMoveDown;
+                if (moveDown) {
+                    for (let v of activityModels) {
+                        v.style.top = `calc(${v.style.top} + ${BLOCK_SIZE}px)`;
+                    }
+                    curTop++;
                 }
-                curTop++;
                 break;
             default:
                 break;
         }
     };
 };
-
+/**
+ * init
+ */
 (function init() {
     const params = {
-        arr: [[1, 0], [1, 0], [1, 1]],
+        arr: arrs[1],
         curLeft: 2,
         curTop: 3,
-        BLOCK_SIZE: 20
+        BLOCK_SIZE: 20,
+        siteSize: {
+            width: 200,
+            height: 360
+        }
     };
     block(params);
 })();
