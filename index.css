@@ -2,18 +2,28 @@ body {
     margin: 0;
     padding: 0;
 }
-.site{
+
+.site {
     position: absolute;
-    left:200px;
-    top:200px;
-    width:200px;
+    left: 200px;
+    top: 200px;
+    width: 200px;
     height: 360px;
-    background-color:black;
+    background-color: black;
 }
+
 .activityModel {
     border: 1px;
     width: 19px;
     height: 19px;
     background: red;
     position: absolute;
+}
+
+.inactiveModel {
+    border: 1px;
+    width: 19px;
+    height: 19px;
+    position: absolute;
+   background-color: gray;
 }
