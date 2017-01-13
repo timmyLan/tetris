@@ -1,14 +1,34 @@
 /**
  * Created by llan on 2017/1/11.
  */
+
+//形状数组
+const arrs = [
+    //L
+    [[1, 0], [1, 0], [1, 1]],
+    [[1, 1, 1], [1, 0, 0]],
+    [[1, 1], [0, 1], [0, 1]],
+    [[0, 0, 1], [1, 1, 1]],
+    //』
+    [[0, 1], [0, 1], [1, 1]],
+    [[1, 0, 0], [1, 1, 1]],
+    [[1, 1], [1, 0], [1, 0]],
+    [[1, 1, 1], [0, 0, 1]],
+    //I
+    [[1], [1], [1], [1]],
+    [[1, 1, 1, 1]],
+    //田
+    [[1, 1], [1, 1]],
+    //T
+    [[1, 1, 1], [0, 1, 0]],
+    [[0, 1], [1, 1], [0, 1]],
+    [[0, 1, 0], [1, 1, 1]],
+    [[1, 0], [1, 1], [1, 0]]
+];
 /**
  * 方块
  * @param params
  */
-const arrs = [
-    [[1, 0], [1, 0], [1, 1]],//L
-    [[1], [1], [1], [1]]//I
-];
 const block = function (params = {
     arr: [[1, 0], [1, 0], [1, 1]],
     curLeft: 0,
@@ -16,7 +36,9 @@ const block = function (params = {
     BLOCK_SIZE: 20,
     siteSize: {
         width: 200,
-        height: 360
+        height: 360,
+        top: 200,
+        left: 200
     }
 }) {
     //方块矩阵
@@ -86,26 +108,34 @@ const block = function (params = {
      * @param arr 将要判断的方块
      * @param deform 是否需要变形
      * @param canMove
-     * @returns {{canMoveRight: boolean, canMoveDown: boolean}} 返回能否向右 || 向下
+     * @returns {{canMoveRight: boolean, canMoveDown: boolean, canMoveTop: boolean, canMoveLeft: boolean}}
      */
     const canMove = function (arr, deform = false, canMove = {
         canMoveRight: true,
-        canMoveDown: true
+        canMoveDown: true,
+        canMoveTop: true,
+        canMoveLeft: true
     }) {
         checkArrWith1(arr, function (i, j) {
             if (deform) {
-                if (siteSize.width - BLOCK_SIZE * (j + 1) < 0) {
+                if (siteSize.width + siteSize.left - BLOCK_SIZE * (j + 1) < 0) {
                     canMove.canMoveRight = false;
                 }
-                if (siteSize.height - BLOCK_SIZE * (i + 1) < 0) {
+                if (siteSize.height + siteSize.top - BLOCK_SIZE * (i + 1) < 0) {
                     canMove.canMoveDown = false;
                 }
             } else {
-                if (siteSize.width - BLOCK_SIZE * (j + 1) <= 0) {
+                if (siteSize.width + siteSize.left - BLOCK_SIZE * (j + 1) <= 0) {
                     canMove.canMoveRight = false;
                 }
-                if (siteSize.height - BLOCK_SIZE * (i + 1) <= 0) {
+                if (siteSize.height + siteSize.top - BLOCK_SIZE * (i + 1) <= 0) {
                     canMove.canMoveDown = false;
+                }
+                if (j * BLOCK_SIZE <= siteSize.left) {
+                    canMove.canMoveLeft = false;
+                }
+                if (i * BLOCK_SIZE <= siteSize.top) {
+                    canMove.canMoveTop = false;
                 }
             }
         });
@@ -137,7 +167,8 @@ const block = function (params = {
                 break;
             //left
             case 37:
-                if (curLeft > 0) {
+                let moveLeft = canMove(arr).canMoveLeft;
+                if (moveLeft) {
                     for (let v of activityModels) {
                         v.style.left = `calc(${v.style.left} - ${BLOCK_SIZE}px)`;
                     }
@@ -146,7 +177,8 @@ const block = function (params = {
                 break;
             //top
             case 38:
-                if (curTop > 0) {
+                let moveTop = canMove(arr).canMoveTop;
+                if (moveTop) {
                     for (let v of activityModels) {
                         v.style.top = `calc(${v.style.top} - ${BLOCK_SIZE}px)`;
                     }
@@ -182,15 +214,19 @@ const block = function (params = {
  * init
  */
 (function init() {
+    const site = document.getElementsByClassName('site')[0];
+    let {width, height, top, left} = window.getComputedStyle(site);
+    let siteSize = {};
+    siteSize.width = parseInt(width.replace('px', ''));
+    siteSize.height = parseInt(height.replace('px', ''));
+    siteSize.top = parseInt(top.replace('px', ''));
+    siteSize.left = parseInt(left.replace('px', ''));
     const params = {
-        arr: arrs[1],
-        curLeft: 2,
-        curTop: 3,
+        arr: arrs[11],
+        curLeft: 14,
+        curTop: 10,
         BLOCK_SIZE: 20,
-        siteSize: {
-            width: 200,
-            height: 360
-        }
+        siteSize: siteSize
     };
     block(params);
 })();
