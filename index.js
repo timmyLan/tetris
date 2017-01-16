@@ -190,6 +190,32 @@ const block = function (params) {
         });
         return canMove;
     };
+
+    const eliminate = function (window) {
+        let res = [],
+            inactiveModels = [...document.querySelectorAll('.inactiveModel')];
+        inactiveModels.sort(function (a, b) {
+            return parseInt(window.getComputedStyle(a).top.replace('px', '')) - parseInt(window.getComputedStyle(b).top.replace('px', ''));
+        });
+        for (let i = 0; i < inactiveModels.length;) {
+            let count = 0,
+                models = [];
+            for (let j = 0; j < inactiveModels.length; j++) {
+                if (window.getComputedStyle(inactiveModels[i]).top === window.getComputedStyle(inactiveModels[j]).top) {
+                    count++;
+                    models.push(inactiveModels[j]);
+                }
+            }
+            res.push({
+                models: models,
+                count: count,
+                top: parseInt(window.getComputedStyle(inactiveModels[i]).top.replace('px', ''))
+            });
+            i += count;
+        }
+        return res;
+    };
+
     //画出当前方块
     checkArrWith1(arr, draw);
     //记录当前方块
@@ -208,6 +234,21 @@ const block = function (params) {
         } else {
             for (let i = 0; i < activityModels.length; i++) {
                 activityModels[i].className = 'inactiveModel'
+            }
+            let res = eliminate(window);
+            for (let i = 0; i < res.length; i++) {
+                let {count, models, top} = res[i];
+                if (count === parseInt(siteSize.width / BLOCK_SIZE)) {
+                    for (let j = 0; j < models.length; j++) {
+                        document.body.removeChild(models[j]);
+                    }
+                    let inactiveModels = document.querySelectorAll('.inactiveModel');
+                    for (let v of inactiveModels) {
+                        if (parseInt(window.getComputedStyle(v).top.replace('px', '')) < top) {
+                            v.style.top = `calc(${window.getComputedStyle(v).top} + ${BLOCK_SIZE}px)`;
+                        }
+                    }
+                }
             }
             init();
             clearInterval(fallDown);
