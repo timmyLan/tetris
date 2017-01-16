@@ -25,5 +25,23 @@ body {
     width: 19px;
     height: 19px;
     position: absolute;
-   background-color: gray;
+    background-color: gray;
+}
+
+.restart {
+    padding: .3em .8em;
+    border: 1px solid rgba(0, 0, 0, .1);
+    background: #58a linear-gradient(hsla(0, 0%, 100%, .2), transparent);
+    border-radius: .2em;
+    box-shadow: 0 .05em .25em rgba(0, 0, 0, .5);
+    color: white;
+    text-shadow: 0 -.05em .05em rgba(0, 0, 0, .5);
+    font-size: 125%;
+    line-height: 1.5;
+    text-align: center;
+    width: 125px;
+    z-index: 11;
+    left: 220px;
+    top: 380px;
+    position: absolute;
 }

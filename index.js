@@ -190,7 +190,11 @@ const block = function (params) {
         });
         return canMove;
     };
-
+    /**
+     * 消除砖块
+     * @param window 用于取得元素最终样式
+     * @returns {Array} 返回每一行的元素数组,个数,高度
+     */
     const eliminate = function (window) {
         let res = [],
             inactiveModels = [...document.querySelectorAll('.inactiveModel')];
@@ -215,7 +219,25 @@ const block = function (params) {
         }
         return res;
     };
-
+    /**
+     * 当灰色砖块高于画布高偏移量,游戏结束
+     * @returns {boolean}
+     */
+    const gameOver = function () {
+        const inactiveModels = document.querySelectorAll('.inactiveModel');
+        let tops = [];
+        for (let v of inactiveModels) {
+            tops.push(parseInt(window.getComputedStyle(v).top.replace('px', '')));
+        }
+        return Math.min(...tops) <= siteSize.top;
+    };
+    const fill = function (curTop, curLeft) {
+        let model = document.createElement('div');
+        model.className = 'inactiveModel';
+        model.style.left = `${curLeft}px`;
+        model.style.top = `${curTop}px`;
+        document.body.appendChild(model);
+    };
     //画出当前方块
     checkArrWith1(arr, draw);
     //记录当前方块
@@ -250,7 +272,36 @@ const block = function (params) {
                     }
                 }
             }
-            init();
+            if (!gameOver()) {
+                init();
+            } else {
+                console.log('Game over~');
+                let curTop = siteSize.height + siteSize.top - BLOCK_SIZE,
+                    curLeft = siteSize.width + siteSize.left - BLOCK_SIZE;
+                let fillId = setInterval(function () {
+                    fill(curTop, curLeft);
+                    curLeft -= BLOCK_SIZE;
+                    if (curLeft < siteSize.left) {
+                        curLeft = siteSize.width + siteSize.left - BLOCK_SIZE;
+                        curTop -= BLOCK_SIZE;
+                    }
+                    if (curTop < siteSize.top) {
+                        clearInterval(fillId);
+                        let restart = document.querySelector('.restart');
+                        restart.style.display = 'block';
+                        restart.onclick = function (event) {
+                            event.preventDefault();
+                            let inactiveModels = [...document.querySelectorAll('.inactiveModel')];
+                            if (inactiveModels.length > 0) {
+                                for(let v of inactiveModels){
+                                    document.body.removeChild(v);
+                                }
+                            }
+                            init();
+                        }
+                    }
+                }, 30);
+            }
             clearInterval(fallDown);
         }
     }, 600);
@@ -263,7 +314,7 @@ const block = function (params) {
         switch (key) {
             //space
             case 32:
-                const speed = 3;
+                const speed = 2;
                 let moveDown = canMove(arr, speed).canMoveDown;
                 if (moveDown) {
                     for (let v of activityModels) {
@@ -332,6 +383,8 @@ const init = function () {
         BLOCK_SIZE: BlOCK_SIZE,
         siteSize: siteSize
     };
+    let restart = document.querySelector('.restart');
+    restart.style.display = 'none';
     block(params);
 };
 
