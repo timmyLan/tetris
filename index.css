@@ -45,4 +45,5 @@ body {
     top: 380px;
     position: absolute;
     display: none;
+    cursor: pointer;
 }
