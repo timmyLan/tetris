@@ -92,23 +92,63 @@ const block = function (params) {
             }
         }
     };
-    const getHighest = function (curLeft) {
+    /**
+     * 获取边界
+     * @param curLeft 当前方块left
+     * @param curTop 当前方块top
+     * @returns {*} 返回左右下边界
+     */
+    const getInterval = function (curLeft, curTop) {
         let inactiveModel = document.querySelectorAll('.inactiveModel');
         if (inactiveModel.length === 0) {
-            return siteSize.top + siteSize.height;
+            return {
+                highest: siteSize.top + siteSize.height,
+                leftmost: siteSize.left - BLOCK_SIZE,
+                rightmost: siteSize.left + siteSize.width
+            };
         } else {
-            let tops = [];
+            let tops = [],
+                lefts = [],
+                rights = [],
+                highest = null,
+                leftmost = null,
+                rightmost = null;
             for (let v of inactiveModel) {
                 let {left, top} = window.getComputedStyle(v);
                 if (left === curLeft) {
                     tops.push(top);
                 }
+                if (top === curTop) {
+                    if (left < curLeft) {
+                        lefts.push(left);
+                    } else if (left > curLeft) {
+                        rights.push(left);
+                    }
+                }
             }
             if (tops.length === 0) {
-                return siteSize.top + siteSize.height;
+                highest = siteSize.top + siteSize.height;
+            } else {
+                tops = Array.from(tops, top => parseInt(top.replace('px', '')));
+                highest = Math.min(...tops);
             }
-            tops = Array.from(tops, top => parseInt(top.replace('px', '')));
-            return Math.min(...tops);
+            if (lefts.length === 0) {
+                leftmost = siteSize.left - BLOCK_SIZE;
+            } else {
+                lefts = Array.from(lefts, left => parseInt(left.replace('px', '')));
+                leftmost = Math.max(...lefts);
+            }
+            if (rights.length === 0) {
+                rightmost = siteSize.left + siteSize.width
+            } else {
+                rights = Array.from(rights, right => parseInt(right.replace('px', '')));
+                rightmost = Math.min(...rights);
+            }
+            return {
+                highest: highest,
+                leftmost: leftmost,
+                rightmost: rightmost
+            };
         }
     };
     /**
@@ -125,23 +165,25 @@ const block = function (params) {
         canMoveLeft: true
     }) {
         checkArrWith1(arr, function (i, j) {
+            let {highest, leftmost, rightmost} = getInterval(`${j * BLOCK_SIZE}px`, `${i * BLOCK_SIZE}px`);
             if (deform) {
-                let highest = getHighest(`${j * BLOCK_SIZE}px`);
-                if (siteSize.width + siteSize.left - BLOCK_SIZE * (j + 1) < 0) {
+                if (BLOCK_SIZE * (j + 1) > rightmost) {
                     canMove.canMoveRight = false;
                 }
                 if (BLOCK_SIZE * (i + speed) > highest) {
                     canMove.canMoveDown = false;
                 }
+                if (BLOCK_SIZE * (j - 1) < leftmost) {
+                    canMove.canMoveLeft = false;
+                }
             } else {
-                let highest = getHighest(`${j * BLOCK_SIZE}px`);
-                if (siteSize.width + siteSize.left - BLOCK_SIZE * (j + 1) <= 0) {
+                if (BLOCK_SIZE * (j + 1) >= rightmost) {
                     canMove.canMoveRight = false;
                 }
                 if (BLOCK_SIZE * (i + speed) >= highest) {
                     canMove.canMoveDown = false;
                 }
-                if (j * BLOCK_SIZE <= siteSize.left) {
+                if (BLOCK_SIZE * (j - 1) <= leftmost) {
                     canMove.canMoveLeft = false;
                 }
             }
