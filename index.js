@@ -383,8 +383,6 @@ const init = function () {
         BLOCK_SIZE: BlOCK_SIZE,
         siteSize: siteSize
     };
-    let restart = document.querySelector('.restart');
-    restart.style.display = 'none';
     block(params);
 };
 
