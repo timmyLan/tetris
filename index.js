@@ -291,6 +291,7 @@ const block = function (params) {
                         restart.style.display = 'block';
                         restart.onclick = function (event) {
                             event.preventDefault();
+                            restart.style.display = 'none';
                             let inactiveModels = [...document.querySelectorAll('.inactiveModel')];
                             if (inactiveModels.length > 0) {
                                 for(let v of inactiveModels){
