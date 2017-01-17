@@ -1,30 +1,6 @@
 /**
  * Created by llan on 2017/1/11.
  */
-
-//形状数组
-const arrs = [
-    //L
-    [[1, 0], [1, 0], [1, 1]],
-    [[1, 1, 1], [1, 0, 0]],
-    [[1, 1], [0, 1], [0, 1]],
-    [[0, 0, 1], [1, 1, 1]],
-    //』
-    [[0, 1], [0, 1], [1, 1]],
-    [[1, 0, 0], [1, 1, 1]],
-    [[1, 1], [1, 0], [1, 0]],
-    [[1, 1, 1], [0, 0, 1]],
-    //I
-    [[1], [1], [1], [1]],
-    [[1, 1, 1, 1]],
-    //田
-    [[1, 1], [1, 1]],
-    //T
-    [[1, 1, 1], [0, 1, 0]],
-    [[0, 1], [1, 1], [0, 1]],
-    [[0, 1, 0], [1, 1, 1]],
-    [[1, 0], [1, 1], [1, 0]]
-];
 /**
  * 方块
  * @param params
@@ -38,6 +14,10 @@ const block = function (params) {
     const BLOCK_SIZE = params.BLOCK_SIZE;
     //当前画布大小
     const siteSize = params.siteSize;
+    //历史最高得分
+    const highestScore = params.highestScore;
+    //方块下落速度
+    const delay = params.delay;
     /**
      * 画当前方块
      * @param i
@@ -154,41 +134,44 @@ const block = function (params) {
     /**
      * 判断当前方块是否能移动||变形
      * @param arr 将要判断的方块
-     * @param speed 方块下落速度
      * @param deform 是否需要变形
-     * @param canMove
-     * @returns {{canMoveRight: boolean, canMoveDown: boolean, canMoveTop: boolean, canMoveLeft: boolean}}
+     * @param displacement 位移
+     * @param move
+     * @returns
      */
-    const canMove = function (arr, speed = 1, deform = false, canMove = {
+    const canMove = function (arr, displacement = 1, deform = false, move = {
         canMoveRight: true,
         canMoveDown: true,
-        canMoveLeft: true
+        canMoveLeft: true,
+        moveDownDivide: []
     }) {
         checkArrWith1(arr, function (i, j) {
             let {highest, leftmost, rightmost} = getInterval(`${j * BLOCK_SIZE}px`, `${i * BLOCK_SIZE}px`);
             if (deform) {
                 if (BLOCK_SIZE * (j + 1) > rightmost) {
-                    canMove.canMoveRight = false;
+                    move.canMoveRight = false;
                 }
-                if (BLOCK_SIZE * (i + speed) > highest) {
-                    canMove.canMoveDown = false;
+                if (BLOCK_SIZE * (i + displacement) > highest) {
+                    move.canMoveDown = false;
+                    move.moveDownDivide.push(highest - BLOCK_SIZE * (i + 1));
                 }
                 if (BLOCK_SIZE * (j - 1) < leftmost) {
-                    canMove.canMoveLeft = false;
+                    move.canMoveLeft = false;
                 }
             } else {
                 if (BLOCK_SIZE * (j + 1) >= rightmost) {
-                    canMove.canMoveRight = false;
+                    move.canMoveRight = false;
                 }
-                if (BLOCK_SIZE * (i + speed) >= highest) {
-                    canMove.canMoveDown = false;
+                if (BLOCK_SIZE * (i + displacement) >= highest) {
+                    move.canMoveDown = false;
+                    move.moveDownDivide.push(highest - BLOCK_SIZE * (i + 1));
                 }
                 if (BLOCK_SIZE * (j - 1) <= leftmost) {
-                    canMove.canMoveLeft = false;
+                    move.canMoveLeft = false;
                 }
             }
         });
-        return canMove;
+        return move;
     };
     /**
      * 消除砖块
@@ -246,13 +229,14 @@ const block = function (params) {
      * 方块自由下落
      * @type {number}
      */
-    const fallDown = setInterval(function () {
+    const fallDown = setTimeout(function () {
         let moveDown = canMove(arr).canMoveDown;
         if (moveDown) {
             for (let v of activityModels) {
                 v.style.top = `calc(${v.style.top} + ${BLOCK_SIZE}px)`;
             }
             curTop++;
+            setTimeout(arguments.callee, delay / window.__level__);
         } else {
             for (let i = 0; i < activityModels.length; i++) {
                 activityModels[i].className = 'inactiveModel'
@@ -269,6 +253,16 @@ const block = function (params) {
                         if (parseInt(window.getComputedStyle(v).top.replace('px', '')) < top) {
                             v.style.top = `calc(${window.getComputedStyle(v).top} + ${BLOCK_SIZE}px)`;
                         }
+                    }
+                    window.__score__ += window.__level__ * 100;
+                    let score = document.querySelector('#score');
+                    score.innerText = window.__score__;
+                    //level最高为4
+                    //升级规则为当前消除数大于等于level*10
+                    if (window.__score__ - (window.__level__ - 1) * (window.__level__ - 1) * 1000 >= window.__level__ * window.__level__ * 1000 && window.__level__ <= 4) {
+                        window.__level__++;
+                        let level = document.querySelector('#level');
+                        level.innerText = window.__level__;
                     }
                 }
             }
@@ -294,40 +288,65 @@ const block = function (params) {
                             restart.style.display = 'none';
                             let inactiveModels = [...document.querySelectorAll('.inactiveModel')];
                             if (inactiveModels.length > 0) {
-                                for(let v of inactiveModels){
+                                for (let v of inactiveModels) {
                                     document.body.removeChild(v);
                                 }
                             }
+                            if (highestScore < window.__score__) {
+                                localStorage.setItem('highestScore', window.__score__);
+                                let highestScoreDiv = document.querySelector('#highest-score');
+                                highestScoreDiv.innerText = window.__score__;
+                            }
+                            window.__score__ = 0;
+                            let score = document.querySelector('#score');
+                            score.innerText = window.__score__;
+                            window.__level__ = 1;
+                            let level = document.querySelector('#level');
+                            level.innerText = window.__level__;
                             init();
                         }
                     }
                 }, 30);
             }
-            clearInterval(fallDown);
+            clearTimeout(fallDown);
         }
-    }, 600);
+    }, delay / window.__level__);
     /**
      * 键盘事件
      * @param e
      */
     document.onkeydown = function (e) {
         const key = e.keyCode;
+        let move,
+            canMoveLeft,
+            canMoveRight,
+            canMoveDown,
+            moveDownDivide;
         switch (key) {
             //space
             case 32:
-                const speed = 2;
-                let moveDown = canMove(arr, speed).canMoveDown;
-                if (moveDown) {
+                let displacement = 2;
+                move = canMove(arr, displacement);
+                canMoveDown = move.canMoveDown;
+                if (canMoveDown) {
                     for (let v of activityModels) {
-                        v.style.top = `calc(${v.style.top} + ${speed} * ${BLOCK_SIZE}px)`;
+                        v.style.top = `calc(${v.style.top} + ${displacement} * ${BLOCK_SIZE}px)`;
                     }
-                    curTop += speed;
+                    curTop += displacement;
+                } else {
+                    moveDownDivide = Math.min(...move.moveDownDivide);
+                    if (moveDownDivide >= BLOCK_SIZE) {
+                        for (let v of activityModels) {
+                            v.style.top = `calc(${v.style.top} + ${BLOCK_SIZE}px)`;
+                        }
+                        curTop++;
+                    }
                 }
                 break;
             //left
             case 37:
-                let moveLeft = canMove(arr).canMoveLeft;
-                if (moveLeft) {
+                canMoveLeft = canMove(arr).canMoveLeft;
+                if (canMoveLeft) {
                     for (let v of activityModels) {
                         v.style.left = `calc(${v.style.left} - ${BLOCK_SIZE}px)`;
                     }
@@ -337,7 +356,9 @@ const block = function (params) {
             //top
             case 38:
                 let {newArr, lefts, tops}= clockwise(arr);
-                let {canMoveRight, canMoveDown} = canMove(newArr, 1, true);
+                move = canMove(newArr, 1, true);
+                canMoveDown = move.canMoveDown;
+                canMoveRight = move.canMoveRight;
                 if (canMoveRight && canMoveDown) {
                     //记录转变后的矩阵
                     arr = newArr;
@@ -349,8 +370,8 @@ const block = function (params) {
                 break;
             //right
             case 39:
-                let moveRight = canMove(arr).canMoveRight;
-                if (moveRight) {
+                canMoveRight = canMove(arr).canMoveRight;
+                if (canMoveRight) {
                     for (let v of activityModels) {
                         v.style.left = `calc(${v.style.left} + ${BLOCK_SIZE}px)`;
                     }
@@ -366,6 +387,24 @@ const block = function (params) {
  * init
  */
 const init = function () {
+    const BlOCK_SIZE = 20,
+        curLeft = parseInt((__siteSize__.left + __siteSize__.width / 2 - BlOCK_SIZE) / BlOCK_SIZE),
+        curTop = parseInt(__siteSize__.top / BlOCK_SIZE),
+        random = Math.floor(Math.random() * __arrs__.length),
+        delay = 600,
+        params = {
+            arr: __arrs__[random],
+            curLeft: curLeft,
+            curTop: curTop,
+            BLOCK_SIZE: BlOCK_SIZE,
+            siteSize: __siteSize__,
+            highestScore: __highestScore__,
+            delay: delay
+        };
+    block(params);
+};
+
+window.onload = function () {
     const site = document.querySelector('.site');
     let {width, height, top, left} = window.getComputedStyle(site);
     let siteSize = {};
@@ -373,20 +412,50 @@ const init = function () {
     siteSize.height = parseInt(height.replace('px', ''));
     siteSize.top = parseInt(top.replace('px', ''));
     siteSize.left = parseInt(left.replace('px', ''));
-    const BlOCK_SIZE = 20,
-        curLeft = parseInt((siteSize.left + siteSize.width / 2 - BlOCK_SIZE) / BlOCK_SIZE),
-        curTop = parseInt(siteSize.top / BlOCK_SIZE);
-    const random = Math.floor(Math.random() * arrs.length);
-    const params = {
-        arr: arrs[random],
-        curLeft: curLeft,
-        curTop: curTop,
-        BLOCK_SIZE: BlOCK_SIZE,
-        siteSize: siteSize
-    };
-    block(params);
+    //显示历史最高分
+    const highestScore = localStorage.getItem('highestScore') || 0;
+    let highestScoreDiv = document.querySelector('#highest-score');
+    highestScoreDiv.innerText = highestScore;
+    //等级
+    window.__level__ = 1;
+    //得分
+    window.__score__ = 0;
+    //显示等级
+    let level = document.querySelector('#level');
+    level.innerText = window.__level__;
+    //历史最高分
+    window.__highestScore__ = highestScore;
+    //画布大小
+    window.__siteSize__ = siteSize;
+    //形状数组
+    window.__arrs__ = [
+        //L
+        [[1, 0], [1, 0], [1, 1]],
+        [[1, 1, 1], [1, 0, 0]],
+        [[1, 1], [0, 1], [0, 1]],
+        [[0, 0, 1], [1, 1, 1]],
+        //』
+        [[0, 1], [0, 1], [1, 1]],
+        [[1, 0, 0], [1, 1, 1]],
+        [[1, 1], [1, 0], [1, 0]],
+        [[1, 1, 1], [0, 0, 1]],
+        //I
+        [[1], [1], [1], [1]],
+        [[1, 1, 1, 1]],
+        [[1], [1], [1], [1]],
+        [[1, 1, 1, 1]],
+        //田
+        [[1, 1], [1, 1]],
+        [[1, 1], [1, 1]],
+        [[1, 1], [1, 1]],
+        [[1, 1], [1, 1]],
+        //T
+        [[1, 1, 1], [0, 1, 0]],
+        [[0, 1], [1, 1], [0, 1]],
+        [[0, 1, 0], [1, 1, 1]],
+        [[1, 0], [1, 1], [1, 0]]
+    ];
+    init();
 };
-
-window.onload = init;
 
 
