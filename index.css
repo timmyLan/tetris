@@ -28,6 +28,18 @@ body {
     background-color: gray;
 }
 
+#next {
+    position: relative;
+}
+
+.nextModel {
+    border: 1px;
+    width: 19px;
+    height: 19px;
+    background: burlywood;
+    position: absolute;
+}
+
 .restart {
     padding: .3em .8em;
     border: 1px solid rgba(0, 0, 0, .1);

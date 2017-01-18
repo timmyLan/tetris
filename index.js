@@ -10,6 +10,8 @@ const block = function (params) {
     let arr = params.arr,
         curLeft = params.curLeft,
         curTop = params.curTop;
+    //下一个落下方块矩阵
+    const nextArr = params.nextArr;
     //方块大小
     const BLOCK_SIZE = params.BLOCK_SIZE;
     //当前画布大小
@@ -22,15 +24,17 @@ const block = function (params) {
      * 画当前方块
      * @param i
      * @param j
+     * @param className 创建方块的className
+     * @param el 容纳方块的element
      */
-    const draw = function (i, j) {
-        let left = j * BLOCK_SIZE;
-        let top = i * BLOCK_SIZE;
+    const draw = function (i, j, className, el) {
+        let left = className === 'nextModel' ? (j + 1) * BLOCK_SIZE - (__siteSize__.left + __siteSize__.width / 2 - BLOCK_SIZE) : j * BLOCK_SIZE;
+        let top = className === 'nextModel' ? (i + 1) * BLOCK_SIZE - siteSize.top : i * BLOCK_SIZE;
         let model = document.createElement('div');
-        model.className = 'activityModel';
+        model.className = className;
         model.style.left = `${left}px`;
         model.style.top = `${top}px`;
-        document.body.appendChild(model);
+        el.appendChild(model);
     };
     /**
      * 顺时针旋转矩阵
@@ -62,12 +66,14 @@ const block = function (params) {
      * 判断数组中值为1的下标
      * @param arr 需要判断的数组
      * @param callback 需要执行的回调函数
+     * @param className 作为draw回调函数的参数
+     * @param el 作为draw回调函数的参数
      */
-    const checkArrWith1 = function (arr, callback) {
+    const checkArrWith1 = function (arr, callback, className, el) {
         for (let i = 0; i <= arr.length - 1; i++) {
             for (let j = 0; j <= arr[0].length - 1; j++) {
                 if (arr[i][j] === 1) {
-                    callback(i + curTop, j + curLeft);
+                    callback(i + curTop, j + curLeft, className, el);
                 }
             }
         }
@@ -221,8 +227,13 @@ const block = function (params) {
         model.style.top = `${curTop}px`;
         document.body.appendChild(model);
     };
+    //清除下一个方块
+    let next = document.querySelector('#next');
+    next.innerHTML = null;
     //画出当前方块
-    checkArrWith1(arr, draw);
+    checkArrWith1(arr, draw, 'activityModel', document.body);
+    //画出下一个方块
+    checkArrWith1(nextArr, draw, 'nextModel', next);
     //记录当前方块
     let activityModels = document.querySelectorAll('.activityModel');
     /**
@@ -267,9 +278,10 @@ const block = function (params) {
                 }
             }
             if (!gameOver()) {
-                init();
+                init(nextArr);
             } else {
                 console.log('Game over~');
+                next.innerHTML = null;
                 let curTop = siteSize.height + siteSize.top - BLOCK_SIZE,
                     curLeft = siteSize.width + siteSize.left - BLOCK_SIZE;
                 let fillId = setInterval(function () {
@@ -386,17 +398,20 @@ const block = function (params) {
 /**
  * init
  */
-const init = function () {
-    const BlOCK_SIZE = 20,
-        curLeft = parseInt((__siteSize__.left + __siteSize__.width / 2 - BlOCK_SIZE) / BlOCK_SIZE),
-        curTop = parseInt(__siteSize__.top / BlOCK_SIZE),
+const init = function (nextArr) {
+    const BLOCK_SIZE = 20,
+        curLeft = parseInt((__siteSize__.left + __siteSize__.width / 2 - BLOCK_SIZE) / BLOCK_SIZE),
+        curTop = parseInt(__siteSize__.top / BLOCK_SIZE),
         random = Math.floor(Math.random() * __arrs__.length),
+        nextRanDom = Math.floor(Math.random() * __arrs__.length),
         delay = 600,
+        arr = nextArr ? nextArr : __arrs__[random],
         params = {
-            arr: __arrs__[random],
+            arr: arr,
+            nextArr: __arrs__[nextRanDom],
             curLeft: curLeft,
             curTop: curTop,
-            BLOCK_SIZE: BlOCK_SIZE,
+            BLOCK_SIZE: BLOCK_SIZE,
             siteSize: __siteSize__,
             highestScore: __highestScore__,
             delay: delay
