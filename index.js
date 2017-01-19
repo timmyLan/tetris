@@ -1,6 +1,7 @@
 /**
  * Created by llan on 2017/1/11.
  */
+'use strict';
 /**
  * 方块
  * @param params
@@ -240,14 +241,14 @@ const block = function (params) {
      * 方块自由下落
      * @type {number}
      */
-    const fallDown = setTimeout(function () {
+    const fallDown = setTimeout(function loop() {
         let moveDown = canMove(arr).canMoveDown;
         if (moveDown) {
             for (let v of activityModels) {
                 v.style.top = `calc(${v.style.top} + ${BLOCK_SIZE}px)`;
             }
             curTop++;
-            setTimeout(arguments.callee, delay / window.__level__);
+            setTimeout(loop, delay / window.__level__);
         } else {
             for (let i = 0; i < activityModels.length; i++) {
                 activityModels[i].className = 'inactiveModel'
