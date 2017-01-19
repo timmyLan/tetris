@@ -59,3 +59,13 @@ body {
     display: none;
     cursor: pointer;
 }
+#next{
+    margin-bottom: 100px;
+}
+#info label{
+    display: inline-block;
+    margin-top: 20px;
+}
+#info{
+    padding: 20px;
+}
