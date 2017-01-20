@@ -418,7 +418,7 @@ class Block {
     }
 }
 /**
- * init
+ * 初始化数据
  */
 const init = function (nextArr) {
     const BLOCK_SIZE = 20,
@@ -441,7 +441,9 @@ const init = function (nextArr) {
     let block = new Block(params);
     block.init();
 };
-
+/**
+ * 浏览器加载初始化
+ */
 window.onload = function () {
     const site = document.querySelector('.site');
     let {width, height, top, left} = window.getComputedStyle(site);
