@@ -190,10 +190,9 @@ class Block {
 
     /**
      * 消除砖块
-     * @param window 用于取得元素最终样式
      * @returns {Array} 返回每一行的元素数组,个数,高度
      */
-    eliminate(window) {
+    eliminate() {
         let res = [],
             inactiveModels = [...document.querySelectorAll('.inactiveModel')];
         inactiveModels.sort(function (a, b) {
@@ -273,7 +272,7 @@ class Block {
                 for (let i = 0; i < activityModels.length; i++) {
                     activityModels[i].className = 'inactiveModel'
                 }
-                let res = this.eliminate(window);
+                let res = this.eliminate();
                 for (let i = 0; i < res.length; i++) {
                     let {count, models, top} = res[i];
                     if (count === parseInt(this.siteSize.width / this.BLOCK_SIZE)) {
@@ -314,7 +313,7 @@ class Block {
                         }
                         if (curTop < this.siteSize.top) {
                             clearInterval(fillId);
-                            let restart = document.querySelector('.restart');
+                            let restart = document.querySelector('.start-restart');
                             restart.style.display = 'block';
                             restart.onclick = (e)=> {
                                 e.preventDefault();
@@ -420,7 +419,7 @@ class Block {
 /**
  * 初始化数据
  */
-const init = function (nextArr) {
+const init = (nextArr)=> {
     const BLOCK_SIZE = 20,
         curLeft = parseInt((__siteSize__.left + __siteSize__.width / 2 - BLOCK_SIZE) / BLOCK_SIZE),
         curTop = parseInt(__siteSize__.top / BLOCK_SIZE),
@@ -444,7 +443,7 @@ const init = function (nextArr) {
 /**
  * 浏览器加载初始化
  */
-window.onload = function () {
+window.onload = ()=> {
     const site = document.querySelector('.site');
     let {width, height, top, left} = window.getComputedStyle(site);
     let siteSize = {};
@@ -505,7 +504,13 @@ window.onload = function () {
         [[0, 1, 1], [1, 1, 0]],
         [[1, 0], [1, 1,], [0, 1]]
     ];
-    init();
+    let start = document.querySelector('.start-restart');
+    start.onclick = (e)=> {
+        e.preventDefault();
+        start.innerText = 'restart';
+        start.style.display = 'none';
+        init();
+    };
 };
 
 

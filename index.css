@@ -41,7 +41,7 @@ body {
     position: absolute;
 }
 
-.restart {
+.start-restart {
     padding: .3em .8em;
     border: 1px solid rgba(0, 0, 0, .1);
     background: #58a linear-gradient(hsla(0, 0%, 100%, .2), transparent);
@@ -57,7 +57,6 @@ body {
     left: 220px;
     top: 380px;
     position: absolute;
-    display: none;
     cursor: pointer;
 }
 #next{
