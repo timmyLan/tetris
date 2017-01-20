@@ -17,7 +17,7 @@ body {
     border: 1px;
     width: 19px;
     height: 19px;
-    background: red;
+    background: linear-gradient(70deg, indianred, white);
     position: absolute;
 }
 
@@ -26,7 +26,7 @@ body {
     width: 19px;
     height: 19px;
     position: absolute;
-    background-color: gray;
+    background: linear-gradient(70deg, grey, white);
 }
 
 #next {
@@ -37,7 +37,7 @@ body {
     border: 1px;
     width: 19px;
     height: 19px;
-    background: burlywood;
+    background: linear-gradient(70deg, #37378c, white);
     position: absolute;
 }
 
