@@ -32,6 +32,7 @@
     * 方块掉落自动掉落
     * 方块集齐满一排消除
     * 方块到顶部视为失败
+
 ### 需要用到变量
 ```javascript
 constructor(params) {
