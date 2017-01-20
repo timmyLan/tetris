@@ -10,6 +10,7 @@ class Block {
     constructor(params) {
         //方块矩阵
         this.arr = params.arr;
+        //当前方块左,上偏移量
         this.curLeft = params.curLeft;
         this.curTop = params.curTop;
         //下一个落下方块矩阵
@@ -86,7 +87,7 @@ class Block {
     };
 
     /**
-     * 获取边界
+     * 获取当前方块能到达的边界
      * @param curLeft 当前方块left
      * @param curTop 当前方块top
      * @returns {*} 返回左右下边界
@@ -500,9 +501,9 @@ window.onload = ()=> {
         [[0, 1], [1, 1], [1, 0]],
         //倒Z
         [[0, 1, 1], [1, 1, 0]],
-        [[1, 0], [1, 1,], [0, 1]],
+        [[1, 0], [1, 1], [0, 1]],
         [[0, 1, 1], [1, 1, 0]],
-        [[1, 0], [1, 1,], [0, 1]]
+        [[1, 0], [1, 1], [0, 1]]
     ];
     let start = document.querySelector('.start-restart');
     start.onclick = (e)=> {
