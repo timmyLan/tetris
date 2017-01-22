@@ -108,7 +108,8 @@ class Block {
                 leftmost = null,
                 rightmost = null;
             for (let v of inactiveModel) {
-                let {left, top} = window.getComputedStyle(v);
+                let left = v.style.left;
+                let top = v.style.top;
                 if (left === curLeft) {
                     tops.push(top);
                 }
@@ -123,19 +124,19 @@ class Block {
             if (tops.length === 0) {
                 highest = this.siteSize.top + this.siteSize.height;
             } else {
-                tops = Array.from(tops, top => parseInt(top.replace('px', '')));
+                tops = Array.from(tops, top => parseInt(top));
                 highest = Math.min(...tops);
             }
             if (lefts.length === 0) {
                 leftmost = this.siteSize.left - this.BLOCK_SIZE;
             } else {
-                lefts = Array.from(lefts, left => parseInt(left.replace('px', '')));
+                lefts = Array.from(lefts, left => parseInt(left));
                 leftmost = Math.max(...lefts);
             }
             if (rights.length === 0) {
                 rightmost = this.siteSize.left + this.siteSize.width
             } else {
-                rights = Array.from(rights, right => parseInt(right.replace('px', '')));
+                rights = Array.from(rights, right => parseInt(right));
                 rightmost = Math.min(...rights);
             }
             return {
@@ -197,13 +198,13 @@ class Block {
         let res = [],
             inactiveModels = [...document.querySelectorAll('.inactiveModel')];
         inactiveModels.sort(function (a, b) {
-            return parseInt(window.getComputedStyle(a).top.replace('px', '')) - parseInt(window.getComputedStyle(b).top.replace('px', ''));
+            return parseInt(a.style.top) - parseInt(b.style.top);
         });
         for (let i = 0; i < inactiveModels.length;) {
             let count = 0,
                 models = [];
             for (let j = 0; j < inactiveModels.length; j++) {
-                if (window.getComputedStyle(inactiveModels[i]).top === window.getComputedStyle(inactiveModels[j]).top) {
+                if (inactiveModels[i].style.top === inactiveModels[j].style.top) {
                     count++;
                     models.push(inactiveModels[j]);
                 }
@@ -211,7 +212,7 @@ class Block {
             res.push({
                 models: models,
                 count: count,
-                top: parseInt(window.getComputedStyle(inactiveModels[i]).top.replace('px', ''))
+                top: parseInt(inactiveModels[i].style.top)
             });
             i += count;
         }
@@ -226,7 +227,7 @@ class Block {
         const inactiveModels = document.querySelectorAll('.inactiveModel');
         let tops = [];
         for (let v of inactiveModels) {
-            tops.push(parseInt(window.getComputedStyle(v).top.replace('px', '')));
+            tops.push(parseInt(v.style.top));
         }
         return Math.min(...tops) <= this.siteSize.top;
     };
@@ -265,7 +266,7 @@ class Block {
             let moveDown = this.canMove(this.arr).canMoveDown;
             if (moveDown) {
                 for (let v of activityModels) {
-                    v.style.top = `calc(${v.style.top} + ${this.BLOCK_SIZE}px)`;
+                    v.style.top = `${parseInt(v.style.top) + this.BLOCK_SIZE}px`;
                 }
                 this.curTop++;
                 setTimeout(loop.bind(this), this.delay / window.__level__);
@@ -282,8 +283,8 @@ class Block {
                         }
                         let inactiveModels = document.querySelectorAll('.inactiveModel');
                         for (let v of inactiveModels) {
-                            if (parseInt(window.getComputedStyle(v).top.replace('px', '')) < top) {
-                                v.style.top = `calc(${window.getComputedStyle(v).top} + ${this.BLOCK_SIZE}px)`;
+                            if (parseInt(v.style.top) < top) {
+                                v.style.top = `${parseInt(v.style.top) + this.BLOCK_SIZE}px`;
                             }
                         }
                         window.__score__ += window.__level__ * 100;
@@ -363,14 +364,14 @@ class Block {
                     canMoveDown = move.canMoveDown;
                     if (canMoveDown) {
                         for (let v of activityModels) {
-                            v.style.top = `calc(${v.style.top} + ${displacement} * ${this.BLOCK_SIZE}px)`;
+                            v.style.top = `${parseInt(v.style.top) + displacement * this.BLOCK_SIZE}px`;
                         }
                         this.curTop += displacement;
                     } else {
                         moveDownDivide = Math.min(...move.moveDownDivide);
                         if (moveDownDivide >= this.BLOCK_SIZE) {
                             for (let v of activityModels) {
-                                v.style.top = `calc(${v.style.top} + ${this.BLOCK_SIZE}px)`;
+                                v.style.top = `${parseInt(v.style.top) + this.BLOCK_SIZE}px`;
                             }
                             this.curTop++;
                         }
@@ -381,7 +382,7 @@ class Block {
                     canMoveLeft = this.canMove(this.arr).canMoveLeft;
                     if (canMoveLeft) {
                         for (let v of activityModels) {
-                            v.style.left = `calc(${v.style.left} - ${this.BLOCK_SIZE}px)`;
+                            v.style.left = `${parseInt(v.style.left) - this.BLOCK_SIZE}px`;
                         }
                         this.curLeft--;
                     }
@@ -406,7 +407,7 @@ class Block {
                     canMoveRight = this.canMove(this.arr).canMoveRight;
                     if (canMoveRight) {
                         for (let v of activityModels) {
-                            v.style.left = `calc(${v.style.left} + ${this.BLOCK_SIZE}px)`;
+                            v.style.left = `${parseInt(v.style.left) + this.BLOCK_SIZE}px`;
                         }
                         this.curLeft++;
                     }
@@ -448,10 +449,10 @@ window.onload = ()=> {
     const site = document.querySelector('.site');
     let {width, height, top, left} = window.getComputedStyle(site);
     let siteSize = {};
-    siteSize.width = parseInt(width.replace('px', ''));
-    siteSize.height = parseInt(height.replace('px', ''));
-    siteSize.top = parseInt(top.replace('px', ''));
-    siteSize.left = parseInt(left.replace('px', ''));
+    siteSize.width = parseInt(width);
+    siteSize.height = parseInt(height);
+    siteSize.top = parseInt(top);
+    siteSize.left = parseInt(left);
     //显示历史最高分
     const highestScore = localStorage.getItem('highestScore') || 0;
     let highestScoreDiv = document.querySelector('#highest-score');
