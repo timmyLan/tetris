@@ -389,7 +389,7 @@ class Block {
                     break;
                 //top
                 case 38:
-                    let {newArr, lefts, tops}= this.clockwise(this.arr);
+                    let {newArr, lefts, tops} = this.clockwise(this.arr);
                     move = this.canMove(newArr, 1, true);
                     canMoveDown = move.canMoveDown;
                     canMoveRight = move.canMoveRight;
