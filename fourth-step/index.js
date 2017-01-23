@@ -71,15 +71,17 @@ class Block {
 
     /**
      * 判断是否可以移动
+     * @param arr 需要判断的矩阵数组
+     * @param deform 是否需要形变
      * @returns {{canMoveRight: boolean, canMoveLeft: boolean, canMoveTop: boolean, canMoveDown: boolean}}
      */
-    canMove() {
-        let activeModel = document.querySelectorAll('.activityModel');
+    canMove(arr, deform = false) {
         let tops = [],
             lefts = [];
-        Array.from(activeModel).forEach((v)=> {
-            tops.push(parseInt(v.style.top));
-            lefts.push(parseInt(v.style.left));
+        //获取当前矩阵数组为1的偏移量
+        this.checkArrWith1(arr, function (i, j) {
+            tops.push(parseInt(i * this.BLOCK_SIZE));
+            lefts.push(parseInt(j * this.BLOCK_SIZE));
         });
         let top = Math.min(...tops),
             left = Math.min(...lefts),
@@ -89,8 +91,14 @@ class Block {
             canMoveTop = true,
             canMoveDown = true,
             canMoveLeft = true;
-        if (right + 20 >= this.siteSize.left + this.siteSize.width) {
-            canMoveRight = false;
+        if (deform) {
+            if (right + 20 > this.siteSize.left + this.siteSize.width) {
+                canMoveRight = false;
+            }
+        } else {
+            if (right + 20 >= this.siteSize.left + this.siteSize.width) {
+                canMoveRight = false;
+            }
         }
         if (left - 20 < this.siteSize.left) {
             canMoveLeft = false;
@@ -125,7 +133,7 @@ class Block {
             switch (key) {
                 //left
                 case 37:
-                    canMoveLeft = this.canMove().canMoveLeft;
+                    canMoveLeft = this.canMove(this.arr).canMoveLeft;
                     if (canMoveLeft) {
                         for (let v of activeModel) {
                             v.style.left = `${parseInt(v.style.left) - 20}px`;
@@ -138,7 +146,7 @@ class Block {
                 //up
                 case 38:
                     let {newArr, lefts, tops} = this.clockwise(this.arr);
-                    move = this.canMove();
+                    move = this.canMove(newArr, true);
                     canMoveDown = move.canMoveDown;
                     canMoveRight = move.canMoveRight;
                     if (canMoveRight && canMoveRight) {
@@ -153,7 +161,7 @@ class Block {
                     break;
                 //right
                 case 39:
-                    canMoveRight = this.canMove().canMoveRight;
+                    canMoveRight = this.canMove(this.arr).canMoveRight;
                     if (canMoveRight) {
                         for (let v of activeModel) {
                             v.style.left = `${parseInt(v.style.left) + 20}px`;
@@ -165,7 +173,7 @@ class Block {
                     break;
                 //down
                 case 40:
-                    canMoveDown = this.canMove().canMoveDown;
+                    canMoveDown = this.canMove(this.arr).canMoveDown;
                     if (canMoveDown) {
                         for (let v of activeModel) {
                             v.style.top = `${parseInt(v.style.top) + 20}px`;
@@ -203,7 +211,7 @@ window.onload = ()=> {
     };
     //方块大小
     const BLOCK_SIZE = 20;
-    //当前画布中间位置
+    //俄罗斯方块初始位置
     let curLeft = parseInt((siteSize.left + siteSize.width / 2) / BLOCK_SIZE);
     let curTop = parseInt(siteSize.top / BLOCK_SIZE);
     //方块矩阵数组
