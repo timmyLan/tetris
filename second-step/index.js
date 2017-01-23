@@ -46,7 +46,6 @@ class Block {
      */
     move() {
         document.onkeydown = (e)=> {
-            e.preventDefault();
             let activeModel = document.querySelector('.activityModel'),
                 left = parseInt(activeModel.style.left) ? parseInt(activeModel.style.left) : 0,
                 top = parseInt(activeModel.style.top) ? parseInt(activeModel.style.top) : 0;
