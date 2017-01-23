@@ -88,10 +88,14 @@ class Block {
         document.onkeydown = (e)=> {
             let activeModel = document.querySelectorAll('.activityModel');
             const key = e.keyCode;
-            const {canMoveRight, canMoveLeft, canMoveTop, canMoveDown} = this.canMove();
+            let canMoveRight,
+                canMoveLeft,
+                canMoveTop,
+                canMoveDown;
             switch (key) {
                 //left
                 case 37:
+                    canMoveLeft = this.canMove().canMoveLeft;
                     if (canMoveLeft) {
                         for (let v of activeModel) {
                             v.style.left = `${parseInt(v.style.left) - 20}px`;
@@ -102,6 +106,7 @@ class Block {
                     break;
                 //up
                 case 38:
+                    canMoveTop = this.canMove().canMoveTop;
                     if (canMoveTop) {
                         for (let v of activeModel) {
                             v.style.top = `${parseInt(v.style.top) - 20}px`;
@@ -112,6 +117,7 @@ class Block {
                     break;
                 //right
                 case 39:
+                    canMoveRight = this.canMove().canMoveRight;
                     if (canMoveRight) {
                         for (let v of activeModel) {
                             v.style.left = `${parseInt(v.style.left) + 20}px`;
@@ -122,6 +128,7 @@ class Block {
                     break;
                 //down
                 case 40:
+                    canMoveDown = this.canMove().canMoveDown;
                     if (canMoveDown) {
                         for (let v of activeModel) {
                             v.style.top = `${parseInt(v.style.top) + 20}px`;

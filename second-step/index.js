@@ -50,10 +50,14 @@ class Block {
                 left = parseInt(activeModel.style.left) ? parseInt(activeModel.style.left) : 0,
                 top = parseInt(activeModel.style.top) ? parseInt(activeModel.style.top) : 0;
             const key = e.keyCode;
-            const {canMoveRight, canMoveLeft, canMoveTop, canMoveDown} = this.canMove();
+            let canMoveRight,
+                canMoveLeft,
+                canMoveTop,
+                canMoveDown;
             switch (key) {
                 //left
                 case 37:
+                    canMoveLeft = this.canMove().canMoveLeft;
                     if (canMoveLeft) {
                         activeModel.style.left = `${left - 20}px`;
                     } else {
@@ -62,6 +66,7 @@ class Block {
                     break;
                 //up
                 case 38:
+                    canMoveTop = this.canMove().canMoveTop;
                     if (canMoveTop) {
                         activeModel.style.top = `${top - 20}px`;
                     } else {
@@ -70,6 +75,7 @@ class Block {
                     break;
                 //right
                 case 39:
+                    canMoveRight = this.canMove().canMoveRight;
                     if (canMoveRight) {
                         activeModel.style.left = `${left + 20}px`;
                     } else {
@@ -78,6 +84,7 @@ class Block {
                     break;
                 //down
                 case 40:
+                    canMoveDown = this.canMove().canMoveDown;
                     if (canMoveDown) {
                         activeModel.style.top = `${top + 20}px`;
                     } else {
