@@ -58,6 +58,14 @@
 * [方块自由下落&统一边界js][15]
 * [本步骤示例][16]
 
+### 第六步:`俄罗斯方块`消除
+* 每次`俄罗斯方块`下落结束时,判断每一行小方块个数
+* `方块`个数等于画布宽度/`方块`,则取出该行`方块`集合并从`document.body`消除
+* 消除后将高度高于该消除行的`方块`掉落一个`方块`高度
+![方块消除][17]
+* [消除行js][18]
+* [本步骤示例][19]
+
 该教程持续更新:kissing_heart: 这是华丽的分割线
 -----
 新年快乐
@@ -87,5 +95,8 @@
   [14]: https://timmylan.github.io/tetris/fourth-step
   [15]: https://github.com/timmyLan/tetris/tree/master/fifth-step/index.js
   [16]: https://timmylan.github.io/tetris/fifth-step
-  [17]: https://github.com/timmyLan/tetris
-  [18]: https://timmylan.github.io/tetris/
+  [17]: http://ohumzw01d.bkt.clouddn.com/%E6%96%B9%E5%9D%97%E6%B6%88%E9%99%A4.png
+  [18]: https://github.com/timmyLan/tetris/tree/master/sixth-step/index.js
+  [19]: https://timmylan.github.io/tetris/sixth-step
+  [20]: https://github.com/timmyLan/tetris
+  [21]: https://timmylan.github.io/tetris/
