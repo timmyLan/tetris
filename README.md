@@ -95,7 +95,7 @@
   [14]: https://timmylan.github.io/tetris/fourth-step
   [15]: https://github.com/timmyLan/tetris/tree/master/fifth-step/index.js
   [16]: https://timmylan.github.io/tetris/fifth-step
-  [17]: http://ohumzw01d.bkt.clouddn.com/%E6%96%B9%E5%9D%97%E6%B6%88%E9%99%A4.png
+  [17]: http://ohumzw01d.bkt.clouddn.com/%E6%B6%88%E9%99%A4%E6%96%B9%E5%9D%97.png
   [18]: https://github.com/timmyLan/tetris/tree/master/sixth-step/index.js
   [19]: https://timmylan.github.io/tetris/sixth-step
   [20]: https://github.com/timmyLan/tetris
