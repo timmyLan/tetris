@@ -1,0 +1,32 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/*当前俄罗斯方块*/
+.activityModel {
+    border: 1px;
+    width: 19px;
+    height: 19px;
+    background: linear-gradient(70deg, indianred, white);
+    position: absolute;
+}
+
+/*已经掉落的俄罗斯方块*/
+.inactiveModel {
+    border: 1px;
+    width: 19px;
+    height: 19px;
+    position: absolute;
+    background: linear-gradient(70deg, grey, white);
+}
+
+/*画布*/
+.site {
+    position: absolute;
+    left: 200px;
+    top: 200px;
+    width: 200px;
+    height: 360px;
+    background-color: black;
+}
