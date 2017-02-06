@@ -68,16 +68,15 @@
 
 该教程持续更新:kissing_heart: 这是华丽的分割线
 -----
-新年快乐
-------
+
 ## 传送门
 * 写到这里无耻求`star` :relaxed:  
 * 写到这里无耻求`star` :relaxed:
 * 写到这里无耻求`star` :relaxed:
 * 若本教程对你有启发或帮助,各位看官请到github上点`star`,给我动力:smirk:
-* [github地址][17]  
-* [本教程示例][18]  
-
+* [github地址][20]  
+* [本教程示例][21]  
+* [最新文档更新移步到segmentfault][22]
 
   [1]: http://ohumzw01d.bkt.clouddn.com/%E4%BF%84%E7%BD%97%E6%96%AF%E6%96%B9%E5%9D%97.png
   [2]: https://github.com/timmyLan/tetris/blob/master/first-step/index.css
@@ -100,3 +99,4 @@
   [19]: https://timmylan.github.io/tetris/sixth-step
   [20]: https://github.com/timmyLan/tetris
   [21]: https://timmylan.github.io/tetris/
+  [22]: https://segmentfault.com/a/1190000008181905
