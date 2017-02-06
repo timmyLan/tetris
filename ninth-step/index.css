@@ -1,0 +1,53 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/*当前俄罗斯方块*/
+.activityModel {
+    border: 1px;
+    width: 19px;
+    height: 19px;
+    background: linear-gradient(70deg, indianred, white);
+    position: absolute;
+}
+
+/*已经掉落的俄罗斯方块*/
+.inactiveModel {
+    border: 1px;
+    width: 19px;
+    height: 19px;
+    position: absolute;
+    background: linear-gradient(70deg, grey, white);
+}
+
+/*画布*/
+.site {
+    position: absolute;
+    left: 200px;
+    top: 200px;
+    width: 200px;
+    height: 360px;
+    background-color: black;
+}
+
+/*开始与重新开始按钮*/
+.start-restart {
+    padding: .3em .8em;
+    border: 1px solid rgba(0, 0, 0, .1);
+    background: #58a linear-gradient(hsla(0, 0%, 100%, .2), transparent);
+    border-radius: .2em;
+    box-shadow: 0 .05em .25em rgba(0, 0, 0, .5);
+    color: white;
+    text-shadow: 0 -.05em .05em rgba(0, 0, 0, .5);
+    font-size: 125%;
+    line-height: 1.5;
+    text-align: center;
+    width: 125px;
+    z-index: 11;
+    left: 220px;
+    top: 380px;
+    position: absolute;
+    cursor: pointer;
+    display: none;
+}
