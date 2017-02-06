@@ -1,9 +1,27 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: rgb(246, 244, 236);
 }
 
+/*当前俄罗斯方块*/
+.activityModel {
+    border: 1px;
+    width: 19px;
+    height: 19px;
+    background: linear-gradient(70deg, indianred, white);
+    position: absolute;
+}
+
+/*已经掉落的俄罗斯方块*/
+.inactiveModel {
+    border: 1px;
+    width: 19px;
+    height: 19px;
+    position: absolute;
+    background: linear-gradient(70deg, grey, white);
+}
+
+/*画布*/
 .site {
     position: absolute;
     left: 200px;
@@ -13,34 +31,7 @@ body {
     background-color: black;
 }
 
-.activityModel {
-    border: 1px;
-    width: 19px;
-    height: 19px;
-    background: linear-gradient(70deg, indianred, white);
-    position: absolute;
-}
-
-.inactiveModel {
-    border: 1px;
-    width: 19px;
-    height: 19px;
-    position: absolute;
-    background: linear-gradient(70deg, grey, white);
-}
-
-#next {
-    position: relative;
-}
-
-.nextModel {
-    border: 1px;
-    width: 19px;
-    height: 19px;
-    background: linear-gradient(70deg, #37378c, white);
-    position: absolute;
-}
-
+/*开始与重新开始按钮*/
 .start-restart {
     padding: .3em .8em;
     border: 1px solid rgba(0, 0, 0, .1);
@@ -58,17 +49,5 @@ body {
     top: 380px;
     position: absolute;
     cursor: pointer;
-}
-
-#next {
-    margin-bottom: 100px;
-}
-
-#info label {
-    display: inline-block;
-    margin-top: 20px;
-}
-
-#info {
-    padding: 20px;
+    display: none;
 }
