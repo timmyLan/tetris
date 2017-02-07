@@ -66,17 +66,42 @@
 * [消除行js][18]
 * [本步骤示例][19]
 
-该教程持续更新:kissing_heart: 这是华丽的分割线
------
+### 第七步:加速下落
+* 让`方块`在按空格键的时候,下落2个单位的BLOCK_SIZE,也就是40px
+* 需要在`canMove`函数中添加`displacement`(位移)参数标识`方块`下落的位移量
+* 判断`方块`是否到达最高位置,需要加上位移量的距离
+* [加速下落js][20]
+* [本步骤示例][21]
+
+### 第八步:判断游戏GG
+* 判断已下落`方块`是否到达画布顶端
+* 增加游戏结束填充动画
+* [游戏结束js][22]
+* [本步骤示例][23]
+ 
+### 第九步:增加随机下落`方块`
+* 将[第零步][24]的形状添加进变量arrs数组
+* 用`Math.random`在每次初始化`方块`时,随机挑选arrs中的一个二维数组进行渲染
+* [随机方块js][25]
+* [本步骤示例][26]
+
+### 第十步:增加游戏信息
+* 增加计分板
+* 增加等级判断
+* 增加下一个方块提示
+* 增加操作提示
+* [提示info css][27]
+* [游戏信息js][28]
+* [本步骤示例][29]
 
 ## 传送门
 * 写到这里无耻求`star` :relaxed:  
 * 写到这里无耻求`star` :relaxed:
 * 写到这里无耻求`star` :relaxed:
 * 若本教程对你有启发或帮助,各位看官请到github上点`star`,给我动力:smirk:
-* [github地址][20]  
-* [本教程示例][21]  
-* [最新文档更新移步到segmentfault][22]
+* [github地址][30]  
+* [本教程示例][31]  
+* [本教程出处][32]
 
   [1]: http://ohumzw01d.bkt.clouddn.com/%E4%BF%84%E7%BD%97%E6%96%AF%E6%96%B9%E5%9D%97.png
   [2]: https://github.com/timmyLan/tetris/blob/master/first-step/index.css
@@ -97,6 +122,16 @@
   [17]: http://ohumzw01d.bkt.clouddn.com/%E6%B6%88%E9%99%A4%E6%96%B9%E5%9D%97.png
   [18]: https://github.com/timmyLan/tetris/tree/master/sixth-step/index.js
   [19]: https://timmylan.github.io/tetris/sixth-step
-  [20]: https://github.com/timmyLan/tetris
-  [21]: https://timmylan.github.io/tetris/
-  [22]: https://segmentfault.com/a/1190000008181905
+  [20]: https://github.com/timmyLan/tetris/tree/master/seventh-step/index.js
+  [21]: https://timmylan.github.io/tetris/seventh-step
+  [22]: https://github.com/timmyLan/tetris/tree/master/eighth-step/index.js
+  [23]: https://timmylan.github.io/tetris/eighth-step
+  [24]: #实现
+  [25]: https://github.com/timmyLan/tetris/tree/master/ninth-step/index.js
+  [26]: https://timmylan.github.io/tetris/ninth-step
+  [27]: https://github.com/timmyLan/tetris/tree/master/tenth-step/index.css
+  [28]: https://github.com/timmyLan/tetris/tree/master/tenth-step/index.js
+  [29]: https://timmylan.github.io/tetris/tenth-step
+  [30]: https://github.com/timmyLan/tetris
+  [31]: https://timmylan.github.io/tetris/
+  [32]: https://segmentfault.com/a/1190000008181905
