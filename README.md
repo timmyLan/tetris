@@ -102,7 +102,7 @@
 * [github地址][30]  
 * [本教程示例][31]  
 * [本教程出处][32]
-
+* [vue版本的俄罗斯方块][33]
   [1]: http://ohumzw01d.bkt.clouddn.com/%E4%BF%84%E7%BD%97%E6%96%AF%E6%96%B9%E5%9D%97.png
   [2]: https://github.com/timmyLan/tetris/blob/master/first-step/index.css
   [3]: https://github.com/timmyLan/tetris/blob/master/first-step/index.js
@@ -135,3 +135,4 @@
   [30]: https://github.com/timmyLan/tetris
   [31]: https://timmylan.github.io/tetris/
   [32]: https://segmentfault.com/a/1190000008181905
+  [33]: https://github.com/timmyLan/tetris-vue
