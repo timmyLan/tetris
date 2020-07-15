@@ -95,9 +95,6 @@
 * [本步骤示例][29]
 
 ## 传送门
-* 写到这里无耻求`star` :relaxed:  
-* 写到这里无耻求`star` :relaxed:
-* 写到这里无耻求`star` :relaxed:
 * 若本教程对你有启发或帮助,各位看官请到github上点`star`,给我动力:smirk:
 * [github地址][30]  
 * [本教程示例][31]  
